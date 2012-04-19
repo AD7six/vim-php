@@ -1,9 +1,6 @@
 " .vim/ftplugin/php.vim by Tobias Schlitt <toby@php.net>.
 " No copyright, feel free to use this, as you like.
 
-" Including PDV
-source php-doc.vim
-
 let PHP_autoformatcomment = 1
 
 " {{{ Settings
