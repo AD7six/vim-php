@@ -10,7 +10,7 @@ VIP - VIM integration for PHP
 This repository contains the most recent version of VIP, VIM integration for
 PHP, including the phpDocumentor for VIM (PDV) script. The main component is a
 VIM file type plugin, which configures a lot of VIM enhancements for more
-comfortable PHP editing in VIM. 
+comfortable PHP editing in VIM.
 
 In addition, this repository also contains useful VIM files I found over the
 web and some self made enhancements for PHP and other languages. Copyright and
@@ -21,17 +21,13 @@ licensing is noted in the specific files, if different than my own.
 Installing the whole VIP package
 ================================
 
-If you want to just use the whole VIP package, maybe because you don't have any
-vim settings yet, you can use the ``install.sh`` command.
+It's recommended you use pathogen to manage your vim plugins.
 
-It will tell you to backup/remove your current vim configs and symlink the
-necessary VIP folders to your home directory.::
-
+   cd .vim/bundles
    git clone https://github.com/tobyS/vip.git
-   cd vip
-   ./install.sh
-   # Don't remove your clone as the files are only symlinked
 
+Alternatively - simply copy the contents of this repo directly into your .vim
+folder
 
 PDV - phpDocumentor for VIM
 ===========================
@@ -333,7 +329,7 @@ PDV
     the PDV functions. This mappings allow you to use the combination <Ctrl>+p
     to document your PHP code. In insert and normal mode, it will make PDV
     document the line under your cursor. In visual mode, it will make PDV
-    detect all known code constructs in the selected range and document them. 
+    detect all known code constructs in the selected range and document them.
 PHPM
     If you have `PHPM support`_ installed, you can simply access the PHP manual
     by hitting <Ctrl>+h on any PHP function name (in insert mode). PHPM will be
@@ -432,10 +428,10 @@ space first and then hit the <Tab> key!
 
 PhpAlign()
 ~~~~~~~~~~
-    
+
 Often you have written down an array declaration or a set of variable
 assignements. Usually things look somewhat ugly the, like ::
-    
+
     $foo = array(
         "test" => "test",
         "foo" => "bar",
@@ -445,7 +441,7 @@ assignements. Usually things look somewhat ugly the, like ::
 
 Aligning this definition properly is an ugly, boring work. The PhpAlign()
 function takes it from you and aligns the array declaration properly: ::
-    
+
     $foo = array(
         "test"          => "test",
         "foo"           => "bar",
@@ -494,7 +490,7 @@ Selecting these lines (all of them) and running PhpUnComment() results in: ::
     {
         return 23;
     }
-    
+
 The .vimrc
 ==========
 
