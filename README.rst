@@ -10,7 +10,7 @@ VIP - VIM integration for PHP
 This repository contains the most recent version of VIP, VIM integration for
 PHP, including the phpDocumentor for VIM (PDV) script. The main component is a
 VIM file type plugin, which configures a lot of VIM enhancements for more
-comfortable PHP editing in VIM. 
+comfortable PHP editing in VIM.
 
 In addition, this repository also contains useful VIM files I found over the
 web and some self made enhancements for PHP and other languages. Copyright and
@@ -333,7 +333,7 @@ PDV
     the PDV functions. This mappings allow you to use the combination <Ctrl>+p
     to document your PHP code. In insert and normal mode, it will make PDV
     document the line under your cursor. In visual mode, it will make PDV
-    detect all known code constructs in the selected range and document them. 
+    detect all known code constructs in the selected range and document them.
 PHPM
     If you have `PHPM support`_ installed, you can simply access the PHP manual
     by hitting <Ctrl>+h on any PHP function name (in insert mode). PHPM will be
@@ -432,10 +432,10 @@ space first and then hit the <Tab> key!
 
 PhpAlign()
 ~~~~~~~~~~
-    
+
 Often you have written down an array declaration or a set of variable
 assignements. Usually things look somewhat ugly the, like ::
-    
+
     $foo = array(
         "test" => "test",
         "foo" => "bar",
@@ -445,7 +445,7 @@ assignements. Usually things look somewhat ugly the, like ::
 
 Aligning this definition properly is an ugly, boring work. The PhpAlign()
 function takes it from you and aligns the array declaration properly: ::
-    
+
     $foo = array(
         "test"          => "test",
         "foo"           => "bar",
@@ -494,7 +494,7 @@ Selecting these lines (all of them) and running PhpUnComment() results in: ::
     {
         return 23;
     }
-    
+
 The .vimrc
 ==========
 
@@ -525,12 +525,6 @@ Seeing the cursor
     your cursor. To save this time amount, I added a mapping, which places a
     nice long line below your cursor in insert mode. Next time simply hit <i>
     and see instantly, where you are currently editing.
-Skeleton
-    Every time you start a PHP file, you have to process the same work: Add
-    opening and closing PHP tags. Using the skeleton file from this
-    repository VIM saves this work for you. As soon as you start a new file,
-    VIM places open and closing tag for you and leaves you in between of these,
-    so you can instantly start editing.
 .phps files
     Apache and other web servers recognize so called .phps files, which get
     displayed as highlighted PHP code. The .vimrc maps .phps files to be
