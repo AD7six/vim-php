@@ -2,7 +2,7 @@
 " ===========================
 "
 " Version: 1.0.0
-" 
+"
 " Copyright 2005 by Tobias Schlitt <toby@php.net>
 " Inspired by phpDoc script for Vim by Vidyut Luther (http://www.phpcult.com/).
 "
@@ -11,34 +11,34 @@
 " This script provides functions to generate phpDocumentor conform
 " documentation blocks for your PHP code. The script currently
 " documents:
-" 
+"
 " - Classes
 " - Methods/Functions
 " - Attributes
 "
-" All of those supporting all PHP 4 and 5 syntax elements. 
+" All of those supporting all PHP 4 and 5 syntax elements.
 "
-" Beside that it allows you to define default values for phpDocumentor tags 
-" like @version (I use $id$ here), @author, @license and so on. 
+" Beside that it allows you to define default values for phpDocumentor tags
+" like @version (I use $id$ here), @author, @license and so on.
 "
-" For function/method parameters and attributes, the script tries to guess the 
-" type as good as possible from PHP5 type hints or default values (array, bool, 
+" For function/method parameters and attributes, the script tries to guess the
+" type as good as possible from PHP5 type hints or default values (array, bool,
 " int, string...).
 "
 " You can use this script by mapping the function PhpDoc() to any
 " key combination. Hit this on the line where the element to document
 " resides and the doc block will be created directly above that line.
-" 
+"
 " Installation
 " ============
-" 
+"
 " For example include into your .vimrc:
-" 
+"
 " source ~/.vim/php-doc.vim
 " imap <C-o> :set paste<CR>:call PhpDoc()<CR>:set nopaste<CR>i
 "
 " This includes the script and maps the combination <ctrl>+o (only in
-" insert mode) to the doc function. 
+" insert mode) to the doc function.
 "
 " Changelog
 " =========
@@ -52,36 +52,34 @@
 "
 " Version 1.1.0
 " -------------
-"  * Fixed bug with call-by-reference parameters. 
-" 
+"  * Fixed bug with call-by-reference parameters.
+"
 
 if has ("user_commands")
 
 " {{{ Globals
 
+if !exists('g:phpdoc_name')
+  let g:phpdoc_name = substitute(system('git config user.name'), "\n", '', '')
+endif
+if !exists('g:phpdoc_email')
+  let g:phpdoc_email = substitute(system('git config user.email'), "\n", '', '')
+endif
+
 " After phpDoc standard
 let g:pdv_cfg_CommentHead = "/**"
 let g:pdv_cfg_Comment1 = " * "
-let g:pdv_cfg_Commentn = " *"
+let g:pdv_cfg_Commentn = " * "
 let g:pdv_cfg_CommentTail = " */"
 let g:pdv_cfg_CommentSingle = "//"
 
 " Default values
 let g:pdv_cfg_Type = "mixed"
-" let g:pdv_cfg_Package = "Framework"
-" let g:pdv_cfg_Package = "Webdav"
-let g:pdv_cfg_Package = "qaVoice"
+let g:pdv_cfg_Package = substitute(substitute(system('git rev-parse --show-toplevel'), "\n", '', ''), '^.*/', '', '')
 let g:pdv_cfg_Version = ""
-let g:pdv_cfg_Author = "Tobias Schlitt <toby@qafoo.com>"
-let g:pdv_cfg_Copyright = "Copyright (C) 2010 Qafoo GmbH. All rights reserved."
+let g:pdv_cfg_Author = g:phpdoc_name . " <" . g:phpdoc_email . ">"
+let g:pdv_cfg_Copyright = "Copyright (C) 2012 " . g:phpdoc_name
 let g:pdv_cfg_License = ""
-
-" TOB: let g:pdv_cfg_Type = "mixed"
-" TOB: let g:pdv_cfg_Package = ""
-" TOB: let g:pdv_cfg_Version = "$id$"
-" TOB: let g:pdv_cfg_Author = "Tobias Schlitt <toby@php.net>"
-" TOB: let g:pdv_cfg_Copyright = "1997-2005 The PHP Group"
-" TOB: let g:pdv_cfg_License = "PHP Version 3.0 {@link http://www.php.net/license/3_0.txt}"
 
 let g:pdv_cfg_ReturnVal = "void"
 
@@ -96,7 +94,7 @@ let g:pdv_cfg_paste = 1
 " Wether for PHP5 code PHP4 tags should be set, like @access,... (1|0)?
 let g:pdv_cfg_php4always = 0
 " TOB: let g:pdv_cfg_php4always = 1
- 
+
 " Wether to guess scopes after PEAR coding standards:
 " $_foo/_bar() == <private|protected> (1|0)?
 let g:pdv_cfg_php4guess = 1
@@ -106,8 +104,8 @@ let g:pdv_cfg_php4guess = 1
 let g:pdv_cfg_php4guessval = "protected"
 
 "
-" Regular expressions 
-" 
+" Regular expressions
+"
 
 let g:pdv_re_comment = ' *\*/ *'
 
@@ -144,7 +142,7 @@ let g:pdv_re_indent = '^\s*'
 let g:pdv_cfg_BOL = "norm! o"
 let g:pdv_cfg_EOL = ""
 
-" }}}  
+" }}}
 
  " {{{ PhpDocSingle()
  " Document a single line of code ( does not check if doc block already exists )
@@ -174,7 +172,7 @@ func! PhpDocRange() range
 			" No matter what, this returns the element name
             let l:elementName = PhpDoc()
             let l:endLine = l:endLine + (line(".") - l:line) + 1
-            let l:line = line(".") + 1 
+            let l:line = line(".") + 1
         endif
         let l:line = l:line + 1
     endwhile
@@ -206,8 +204,8 @@ endfunc
 " 	while (l:currentLine <= line("$"))
 " 		" HERE!!!!
 " 	endwhile
-" 	
-" 
+"
+"
 " endfunc
 
 
@@ -219,7 +217,7 @@ func! PhpDoc()
     " Needed for my .vimrc: Switch off all other enhancements while generating docs
     let l:paste = &g:paste
     let &g:paste = g:pdv_cfg_paste == 1 ? 1 : &g:paste
-    
+
     let l:line = getline(".")
     let l:result = ""
 
@@ -247,7 +245,7 @@ func! PhpDoc()
 endfunc
 
 " }}}
-" {{{  PhpDocFunc()  
+" {{{  PhpDocFunc()
 
 func! PhpDocFunc()
     " Line for the comment to begin
@@ -263,7 +261,7 @@ func! PhpDocFunc()
     " Now we have to split DECL in three parts:
     " \[(skopemodifier\)]\(funcname\)\(parameters\)
     let l:indent = matchstr(l:name, g:pdv_re_indent)
-    
+
     let l:modifier = substitute (l:name, g:pdv_re_func, '\1', "g")
     let l:funcname = substitute (l:name, g:pdv_re_func, '\2', "g")
     let l:parameters = substitute (l:name, g:pdv_re_func, '\3', "g") . ","
@@ -271,12 +269,12 @@ func! PhpDocFunc()
     let l:static = g:pdv_cfg_php4always == 1 ? matchstr(l:modifier, g:pdv_re_static) : ""
     let l:abstract = g:pdv_cfg_php4always == 1 ? matchstr(l:modifier, g:pdv_re_abstract) : ""
     let l:final = g:pdv_cfg_php4always == 1 ? matchstr(l:modifier, g:pdv_re_final) : ""
-    
+
     " Local indent
     let l:txtBOL = g:pdv_cfg_BOL . l:indent
 
     let l:comment_lines = []
-    
+
     call add(l:comment_lines, l:indent . g:pdv_cfg_CommentHead)
     call add(l:comment_lines, l:indent . g:pdv_cfg_Comment1 . funcname)
     call add(l:comment_lines, l:indent . g:pdv_cfg_Commentn)
@@ -296,7 +294,7 @@ func! PhpDocFunc()
         if l:paramtype == ""
             let l:paramtype = PhpDocType(l:paramdefault)
         endif
-        
+
         if l:paramtype != ""
             let l:paramtype = " " . l:paramtype
         endif
@@ -324,8 +322,8 @@ func! PhpDocFunc()
     return l:modifier ." ". l:funcname
 endfunc
 
-" }}}  
- " {{{  PhpDocVar() 
+" }}}
+ " {{{  PhpDocVar()
 
 func! PhpDocVar()
 	" Line for the comment to begin
@@ -350,7 +348,7 @@ func! PhpDocVar()
     let l:type = PhpDocType(l:default)
 
     let l:comment_lines = []
-	
+
     call add(l:comment_lines, l:indent . g:pdv_cfg_CommentHead)
 	call add(l:comment_lines, l:indent . g:pdv_cfg_Comment1 . l:varname)
     call add(l:comment_lines, l:indent . g:pdv_cfg_Commentn)
@@ -361,7 +359,7 @@ func! PhpDocVar()
     if l:scope != ""
         call add(l:comment_lines, l:indent . g:pdv_cfg_Commentn . " @access " . l:scope)
     endif
-	
+
     " Close the comment block.
 	call add(l:comment_lines, l:indent . g:pdv_cfg_CommentTail)
 
@@ -381,7 +379,7 @@ func! PhpDocClass()
 	" Now we have to split DECL in three parts:
 	" \[(skopemodifier\)]\(classname\)\(parameters\)
     let l:indent = matchstr(l:name, g:pdv_re_indent)
-	
+
 	let l:modifier = substitute (l:name, g:pdv_re_class, '\1', "g")
 	let l:classname = substitute (l:name, g:pdv_re_class, '\3', "g")
 	let l:extends = g:pdv_cfg_Uses == 1 ? substitute (l:name, g:pdv_re_class, '\5', "g") : ""
@@ -391,7 +389,7 @@ func! PhpDocClass()
 	let l:final = g:pdv_cfg_php4always == 1 ?  matchstr(l:modifier, g:pdv_re_final) : ""
 
     let l:comment_lines = []
-	
+
     call add(l:comment_lines, l:indent . g:pdv_cfg_CommentHead)
 	call add(l:comment_lines, l:indent . g:pdv_cfg_Comment1 . l:classname)
     call add(l:comment_lines, l:indent . g:pdv_cfg_Commentn)
@@ -426,13 +424,13 @@ func! PhpDocClass()
 	return l:modifier ." ". l:classname
 endfunc
 
-" }}} 
-" {{{ PhpDocScope() 
+" }}}
+" {{{ PhpDocScope()
 
 func! PhpDocScope(modifiers, identifier)
 " exe g:pdv_cfg_BOL . DEBUG: . a:modifiers . g:pdv_cfg_EOL
     let l:scope  = ""
-    if  matchstr (a:modifiers, g:pdv_re_scope) != "" 
+    if  matchstr (a:modifiers, g:pdv_re_scope) != ""
         if g:pdv_cfg_php4always == 1
             let l:scope = matchstr (a:modifiers, g:pdv_re_scope)
         else
@@ -454,13 +452,13 @@ endfunc
 
 func! PhpDocType(typeString)
     let l:type = ""
-    if a:typeString =~ g:pdv_re_array 
+    if a:typeString =~ g:pdv_re_array
         let l:type = "array"
     endif
-    if a:typeString =~ g:pdv_re_float 
+    if a:typeString =~ g:pdv_re_float
         let l:type = "float"
     endif
-    if a:typeString =~ g:pdv_re_int 
+    if a:typeString =~ g:pdv_re_int
         let l:type = "int"
     endif
     if a:typeString =~ g:pdv_re_string
@@ -474,24 +472,24 @@ func! PhpDocType(typeString)
 	endif
     return l:type
 endfunc
-    
-"  }}} 
+
+"  }}}
 " {{{  PhpDocDefault()
 
 func! PhpDocDefault()
 	" Line for the comment to begin
 	let commentline = line (".") - 1
-    
+
     let l:indent = matchstr(getline("."), '^\ *')
-    
+
     exe "norm! " . commentline . "G$"
-    
+
     " Local indent
     let l:txtBOL = g:pdv_cfg_BOL . indent
 
     exe l:txtBOL . g:pdv_cfg_CommentHead . g:pdv_cfg_EOL
     exe l:txtBOL . g:pdv_cfg_Commentn . g:pdv_cfg_EOL
-	
+
     " Close the comment block.
 	exe l:txtBOL . g:pdv_cfg_CommentTail . g:pdv_cfg_EOL
 endfunc
